@@ -2,6 +2,6 @@
 GAN training and testing
 
 ## Requirements:
-⋅*PyTorch
+⋅PyTorch
 
-⋅*Instaloader
+⋅Instaloader
