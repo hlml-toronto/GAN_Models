@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 
 def generate_2D_gaussian(num_points, mu, sigma=np.eye(2)):
 	"""
@@ -43,7 +44,8 @@ def gaussian_batch(batch_size, num_centers, num_points, r=0.5):
 	batch = []
 	for i in range(batch_size):
 		sample = generate_2D_gaussian(num_points, centers, sigma=0.001*np.eye(2))
-		batch.append(sample)
+		torch_sample = torch.Tensor(sample)
+		batch.append(torch_sample)
 	return batch
 
 
@@ -67,6 +69,6 @@ if __name__ == '__main__':
 	for j in range(batch_size):
 		fig = plt.figure()
 		for i in range(num_centers):
-			plt.scatter(np.array(batch)[j][i*10:(i+1)*10][:,0],
-				    np.array(batch)[j][i*10:(i+1)*10][:,1], c=colors[i%len(colors)])
+			plt.scatter(batch[j].numpy()[i*10:(i+1)*10][:,0],
+				    batch[j].numpy()[i*10:(i+1)*10][:,1], c=colors[i%len(colors)])
 		plt.show()
