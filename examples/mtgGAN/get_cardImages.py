@@ -1,13 +1,14 @@
-import requests as req
 import json
 import os
-from collections import Counter
-import time
+import requests as req
 import sys
+import time
+from collections import Counter
 
-# #get updated master bulk JSON file if it isn't already in directory
+
+# get updated master bulk JSON file if it isn't already in directory
 currDir = os.path.dirname(os.path.realpath(__file__))
-bulkDir = currDir + "/Bulk_JSON/"
+bulkDir = currDir + os.sep + "Bulk_JSON" + os.sep
 
 if not os.path.exists(bulkDir):
     os.makedirs(bulkDir)
@@ -17,7 +18,7 @@ if not os.path.exists(bulkDir + "MASTER_BULK.json") and not os.path.exists(bulkD
     master_bulk = req.get(master_bulk_url, allow_redirects=True)
     open(bulkDir + "MASTER_BULK.json", 'wb').write(master_bulk.content)
 
-    #now get json for unique art cards
+    # now get json for unique art cards
     f = open(bulkDir + "MASTER_BULK.json")
     master_json_dicts = json.load(f)
 
@@ -28,8 +29,8 @@ if not os.path.exists(bulkDir + "MASTER_BULK.json") and not os.path.exists(bulkD
     unique_artwork_bulk = req.get(unique_bulk_url, allow_redirects=True)
     open(bulkDir + "UNIQUE_ARTWORK.json", 'wb').write(unique_artwork_bulk.content)
 
-#read unique art json and print
-f = open(bulkDir + "UNIQUE_ARTWORK.json")
+# read unique art json and print
+f = open(bulkDir + "UNIQUE_ARTWORK.json", encoding="utf8")
 unique_json_dicts = json.load(f)
 
 #print(unique_json_dicts[0]["image_uris"]["art_crop"])
@@ -46,7 +47,7 @@ for i, card in enumerate(unique_json_dicts):
             primary_creature_types.append(primary_type)
             primary_creature_indicies.append(i)
 
-#take the top 10 most abundant creature types and download images into respective folders (respecting API call frequency limits)
+# take the top 10 most abundant creature types and download images into respective folders (respecting API call frequency limits)
 types_to_count = Counter(primary_creature_types)
 main_type = types_to_count.most_common(10)
 
@@ -75,12 +76,3 @@ for ele in main_type:
                 sys.stdout.write("\r" + str(i) + '/' + str(num_files))
                 sys.stdout.flush()
                 time.sleep(0.1)
-
-
-
-
-
-
-
-
-
