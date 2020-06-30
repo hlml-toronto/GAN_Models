@@ -45,3 +45,5 @@ if __name__ == '__main__':
 
     load_master_bulk(path_master_bulk, verbose=True)
     load_unique_artwork(path_unique_artwork, verbose=True)
+    print("TODO")
+    
