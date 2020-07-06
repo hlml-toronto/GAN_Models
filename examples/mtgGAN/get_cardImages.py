@@ -113,13 +113,18 @@ def get_images_sort_colours(json_file, working_directory):
     for card in json_file:
         colours_present = card["color_identity"]
         id = card["id"]
+        type = card['type_line']
         filename = id + ".jpg"
 
         if not any(filename in s for s in files_present):
             if "image_uris" in card.keys():
 
+                #if a land place in its own folder (colour isn't really well defined)
+                if "Land" in type:
+                    path = colours_imageDir + str("Land") + os.sep
+
                 #if a multicoloured card place in separate folder
-                if len(colours_present) >1:
+                elif len(colours_present) >1:
                     path = colours_imageDir  + str("Multicoloured") + os.sep
 
                 #if no colours present this is a colourless card
