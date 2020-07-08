@@ -2,3 +2,6 @@ venv
 .idea/
 Images
 Images_DS
+
+examples/mtgGAN/\.ipynb_checkpoints/
+examples/mtgGAN/Output
