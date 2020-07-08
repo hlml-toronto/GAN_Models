@@ -71,22 +71,21 @@ def get_images_sort_creatures(json_file, working_directory):
 
         if not os.path.exists(type_path):
             os.makedirs(type_path)
-        else:
-            #if not any(filename in s for s in files_present):
-            #download images into folder with 100ms delay between API requests
-            num_files = len(indicies_of_json)
 
-            for i, index in enumerate(indicies_of_json):
-                id = json_file[index]["id"]
-                filename = id + ".jpg"
+        #download images into folder with 100ms delay between API requests
+        num_files = len(indicies_of_json)
 
-                if not any(filename in s for s in files_present):
-                    if "image_uris" in json_file[index].keys():
-                        image = req.get(json_file[index]["image_uris"]["art_crop"], allow_redirects=True)
-                        open(type_path + str(json_file[index]["id"]) + ".jpg", 'wb').write(image.content)
-                        sys.stdout.write("\r" + str(i) + '/' + str(num_files))
-                        sys.stdout.flush()
-                        time.sleep(0.1)
+        for i, index in enumerate(indicies_of_json):
+            id = json_file[index]["id"]
+            filename = id + ".jpg"
+
+            if not any(filename in s for s in files_present):
+                if "image_uris" in json_file[index].keys():
+                    image = req.get(json_file[index]["image_uris"]["art_crop"], allow_redirects=True)
+                    open(type_path + str(json_file[index]["id"]) + ".jpg", 'wb').write(image.content)
+                    sys.stdout.write("\r" + str(i) + '/' + str(num_files))
+                    sys.stdout.flush()
+                    time.sleep(0.1)
 
 def get_images_sort_colours(json_file, working_directory):
 
@@ -106,7 +105,6 @@ def get_images_sort_colours(json_file, working_directory):
     for dir,_,_ in os.walk(colours_imageDir):
         files_present.extend(glob(os.path.join(dir,pattern)))
 
-    #print(files_present)
     num_cards_downloaded = len(files_present)
 
     #download all images and sort by colour
@@ -156,8 +154,8 @@ def main():
     get_json(bulkDir)
 
     #open unique artwork json file
-    f = open(bulkDir + "UNIQUE_ARTWORK.json", encoding="utf8")
-    unique_json_dicts = json.load(f)
+    with open(bulkDir + "UNIQUE_ARTWORK.json", encoding="utf8") as json_file:
+        unique_json_dicts = json.load(json_file)
 
     #get images, choosing colours for example here
     get_images_sort_colours(unique_json_dicts, currDir)
