@@ -38,15 +38,22 @@ def downsample_dir(img_dir, img_size=(64,64), SHOW=False):
     # for visualizing an image
     show_img = randint(0,200); i = 0;
 
+    print("\n--downsampling images--" + ':\n')
+    print("Progress" + ':\n')
+    nbr_files = sum([len(files) for r, d, files in os.walk(img_dir)])
+    i = 1
     for path, subdirs, files in os.walk(img_dir):
         for filename in files:
+            # Progress bar
+            sys.stdout.write("\r" + str(i) + '/' + str(nbr_files))
+            sys.stdout.flush()
+
             # have only relative paths to images
             rel_dir = os.path.relpath(path, img_dir)
             # create subdir in _DS
             if not os.path.exists(img_ds_dir + os.sep + rel_dir):
                 os.makedirs(img_ds_dir + os.sep + rel_dir)
             rel_file = os.path.join(rel_dir, filename)
-            print(rel_file)
             img = io.imread(img_dir + os.sep + rel_file)
             # converting to uint8 for no lossy conversion. Might want to change
             # back to float 64
@@ -64,8 +71,7 @@ def downsample_dir(img_dir, img_size=(64,64), SHOW=False):
                 ax[1].set_title("Rescaled image (aliasing)")
                 plt.tight_layout(); plt.show()
             io.imsave(img_ds_dir + os.sep + rel_file, img_resized)
-            i += 1
-
+            i+=1
     return 0
 
 if __name__ == '__main__':
